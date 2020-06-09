@@ -43,6 +43,7 @@ params.timeTrial = 30;
 params.timeExp = [];
 params.reportWhichLine = 1; % for 1 line show 2 condition only, 1: left, 2: right
 params.tWaitMatch = 4.5; % for 1 line show 2 condition only, to match trial duration of 2 line condition
+params.leftLine49 = 2; % for 2 line fixed orientation;
 
 % Text prompt
 params.textColor = [255 255 255];
@@ -53,18 +54,14 @@ params.ratingScale = [1 10];
 params.instruction = 0;
 
 % Subject and session
-trialCondition = 1; %##################################   
-params.subject = 'xw'; %##################################  
-params.session = 1; %##################################  
+trialCondition = 2; %##################################   
+params.subject = 'rl'; %##################################  
+params.session = 2; %##################################  
 params.delay = [];
 
 %% Run the driver program
 fileLoad = '';
-if trialCondition == 0.0
-    params.nTrialPerCondition = 20;
-    params.experimentName = 'Train_1lineShow1';
-    Train_1lineShow1(params, fileLoad)  
-elseif trialCondition == 0.01
+if trialCondition == 0.01
     params.nTrialPerCondition = 20;
     params.experimentName = 'Train_1lineShow1';
     Train_1lineShow1_49(params, fileLoad) 
@@ -98,12 +95,8 @@ elseif trialCondition == 1.2
     Main_1lineShow1_54(params, fileLoad)
 elseif trialCondition == 2
     params.nTrialPerCondition = 25;
-    params.experimentName = 'HighToLow';
-    Main_sequentialDraw(params, fileLoad)
-elseif trialCondition == 3
-    params.nTrialPerCondition = 25;
-    params.experimentName = 'HighToLow_separate';
-    Main_separateDraw(params, fileLoad)    
+    params.experimentName = 'HighToLow_separate_fixed';
+    Main_separateDraw_fixed(params, fileLoad)    
 end    
     
     
