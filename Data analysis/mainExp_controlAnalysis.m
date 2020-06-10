@@ -8,7 +8,8 @@ markerSize = 8;
 lineWidth = 0.5;
 nBootstrap = 10000;
 useSplit1line = 1;
-excludeIncorrectTrial = 0; % 0: all trials
+alpha = 0.05;
+excludeIncorrectTrial = 2; % 0: all trials
                            % 1: correct trials
                            % 2: all trials but flip incorrect trials across diagonal line
 meanDiffEst_Cond1_same = NaN(1, length(subjectAll));
@@ -16,10 +17,12 @@ meanDiffEst_Cond1_diff = NaN(1, length(subjectAll));
 meanDiffEst_Cond1 = NaN(1, length(subjectAll));
 meanDiffEst_Cond2_same = NaN(1, length(subjectAll));
 meanDiffEst_Cond2_diff = NaN(1, length(subjectAll));
+meanDiffEst_Cond2 = NaN(1, length(subjectAll));
 meanDiffEst_Cond3_same = NaN(1, length(subjectAll));
 meanDiffEst_Cond3_diff = NaN(1, length(subjectAll));
+meanDiffEst_Cond3 = NaN(1, length(subjectAll));
 
-%% Summary statistics
+%% Compute the mean angle difference for same and difference groups
 for ss = 1 : length(subjectAll)
     subject = subjectAll{ss};
     
@@ -192,11 +195,15 @@ for ss = 1 : length(subjectAll)
     if excludeIncorrectTrial == 0
         meanDiffEst_Cond2_same(ss) = nanmean(estimateStim2_same) - nanmean(estimateStim1_same);
         meanDiffEst_Cond2_diff(ss) = nanmean(estimateStim2_diff) - nanmean(estimateStim1_diff);
+        meanDiffEst_Cond2(ss) = nanmean([estimateStim2_same; estimateStim2_diff]) ...
+                                        - nanmean([estimateStim1_same; estimateStim1_diff]);
     elseif excludeIncorrectTrial == 1
         diffEst_same = estimateStim2_same - estimateStim1_same;
         diffEst_diff = estimateStim2_diff - estimateStim1_diff;
         meanDiffEst_Cond2_same(ss) = nanmean(estimateStim2_same(diffEst_same>0)) - nanmean(estimateStim1_same(diffEst_same>0));
-        meanDiffEst_Cond2_diff(ss) = nanmean(estimateStim2_diff(diffEst_diff>0)) - nanmean(estimateStim1_diff(diffEst_diff>0));  
+        meanDiffEst_Cond2_diff(ss) = nanmean(estimateStim2_diff(diffEst_diff>0)) - nanmean(estimateStim1_diff(diffEst_diff>0)); 
+        meanDiffEst_Cond2(ss) = nanmean([estimateStim2_same(diffEst_same>0); estimateStim2_diff(diffEst_diff>0)]) ...
+                                        - nanmean([estimateStim1_same(diffEst_same>0); estimateStim1_diff(diffEst_diff>0)]);        
     else
         indFlip = (estimateStim2_same - estimateStim1_same) < 0; % flip the incorrect trials
         estStim1_swap = estimateStim1_same(indFlip);
@@ -210,7 +217,9 @@ for ss = 1 : length(subjectAll)
         estStim2_swap = estimateStim2_diff(indFlip);
         estimateStim1_diff(indFlip) = estStim2_swap;
         estimateStim2_diff(indFlip) = estStim1_swap;  
-        meanDiffEst_Cond2_diff(ss) = nanmean(estimateStim2_diff) - nanmean(estimateStim1_diff);        
+        meanDiffEst_Cond2_diff(ss) = nanmean(estimateStim2_diff) - nanmean(estimateStim1_diff);    
+        meanDiffEst_Cond2(ss) = nanmean([estimateStim2_same; estimateStim2_diff]) ...
+                                        - nanmean([estimateStim1_same; estimateStim1_diff]);        
     end
     
     
@@ -276,11 +285,15 @@ for ss = 1 : length(subjectAll)
     if excludeIncorrectTrial == 0
         meanDiffEst_Cond3_same(ss) = nanmean(estimateStim2_same) - nanmean(estimateStim1_same);
         meanDiffEst_Cond3_diff(ss) = nanmean(estimateStim2_diff) - nanmean(estimateStim1_diff);
+        meanDiffEst_Cond3(ss) = nanmean([estimateStim2_same; estimateStim2_diff]) ...
+                                        - nanmean([estimateStim1_same; estimateStim1_diff]);        
     elseif excludeIncorrectTrial == 1
         diffEst_same = estimateStim2_same - estimateStim1_same;
         diffEst_diff = estimateStim2_diff - estimateStim1_diff;
         meanDiffEst_Cond3_same(ss) = nanmean(estimateStim2_same(diffEst_same>0)) - nanmean(estimateStim1_same(diffEst_same>0));
-        meanDiffEst_Cond3_diff(ss) = nanmean(estimateStim2_diff(diffEst_diff>0)) - nanmean(estimateStim1_diff(diffEst_diff>0));      
+        meanDiffEst_Cond3_diff(ss) = nanmean(estimateStim2_diff(diffEst_diff>0)) - nanmean(estimateStim1_diff(diffEst_diff>0)); 
+        meanDiffEst_Cond3(ss) = nanmean([estimateStim2_same(diffEst_same>0); estimateStim2_diff(diffEst_diff>0)]) ...
+                                        - nanmean([estimateStim1_same(diffEst_same>0); estimateStim1_diff(diffEst_diff>0)]);                
     else
         indFlip = (estimateStim2_same - estimateStim1_same) < 0; % flip the incorrect trials
         estStim1_swap = estimateStim1_same(indFlip);
@@ -294,10 +307,23 @@ for ss = 1 : length(subjectAll)
         estStim2_swap = estimateStim2_diff(indFlip);
         estimateStim1_diff(indFlip) = estStim2_swap;
         estimateStim2_diff(indFlip) = estStim1_swap;  
-        meanDiffEst_Cond3_diff(ss) = nanmean(estimateStim2_diff) - nanmean(estimateStim1_diff);            
+        meanDiffEst_Cond3_diff(ss) = nanmean(estimateStim2_diff) - nanmean(estimateStim1_diff);       
+        meanDiffEst_Cond3(ss) = nanmean([estimateStim2_same; estimateStim2_diff]) ...
+                                        - nanmean([estimateStim1_same; estimateStim1_diff]);        
     end
     
 end
+
+%% Compute the fraction repulsion explained by cross-trial adaptation
+meanDiffEst_Cond2_same_offset = meanDiffEst_Cond2_same - meanDiffEst_Cond1;
+meanDiffEst_Cond2_diff_offset = meanDiffEst_Cond2_diff - meanDiffEst_Cond1;
+meanDiffEst_Cond2_offset = meanDiffEst_Cond2 - meanDiffEst_Cond1;
+p_crossTrial_Cond2 = (meanDiffEst_Cond2_diff_offset - meanDiffEst_Cond2_same_offset) ./ abs(meanDiffEst_Cond2_diff_offset);
+
+meanDiffEst_Cond3_same_offset = meanDiffEst_Cond3_same - meanDiffEst_Cond1;
+meanDiffEst_Cond3_diff_offset = meanDiffEst_Cond3_diff - meanDiffEst_Cond1;
+meanDiffEst_Cond3_offset = meanDiffEst_Cond3 - meanDiffEst_Cond1;
+p_crossTrial_Cond3 = (meanDiffEst_Cond3_diff_offset - meanDiffEst_Cond3_same_offset) ./ abs(meanDiffEst_Cond3_diff_offset);
 
 %% Plot the results
 colorName = {'Pink', 'Brown', 'Olive', 'Teal', 'Blue', 'Black', 'Red', 'Orange', 'Yellow',...
@@ -348,3 +374,35 @@ title('Cond 3')
 xlabel('Mean angle - same (deg)')
 ylabel('Mean angle - different (deg)')
 
+figure
+subplot(1, 2, 1)
+hold on
+mean_p_2 = median(p_crossTrial_Cond2);
+sem_p_2 = std(p_crossTrial_Cond2) / length(p_crossTrial_Cond2);
+plot([0 length(p_crossTrial_Cond2)+1], [mean_p_2 mean_p_2], '--k') 
+bar(1:length(p_crossTrial_Cond2), p_crossTrial_Cond2)
+xlabel('Subject')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+title('Condition 2')
+
+subplot(1, 2, 2)
+hold on
+mean_p_3 = median(p_crossTrial_Cond3);
+sem_p_3 = std(p_crossTrial_Cond3) / length(p_crossTrial_Cond3);
+plot([0 length(p_crossTrial_Cond3)+1], [mean_p_3 mean_p_3], '--k') 
+bar(1:length(p_crossTrial_Cond3), p_crossTrial_Cond3)
+xlabel('Subject')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+title('Condition 3')
+
+figure
+colorName = {'Crimson', 'DarkOrange', 'Teal', 'DodgerBlue'};
+colorIndex = NaN(length(colorName), 3);
+for ii = 1 : length(colorName)
+    colorIndex(ii, :) = rgb(colorName{ii});
+end
+hold on
+plot([0 3], [1 1], '--k')
+errorBarGraph([mean_p_2; mean_p_3], [mean_p_2-sem_p_2; mean_p_3-sem_p_3], [mean_p_2+sem_p_2; mean_p_3+sem_p_3], colorIndex)
+box off
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
