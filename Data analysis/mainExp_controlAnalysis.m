@@ -318,12 +318,14 @@ end
 meanDiffEst_Cond2_same_offset = meanDiffEst_Cond2_same - meanDiffEst_Cond1;
 meanDiffEst_Cond2_diff_offset = meanDiffEst_Cond2_diff - meanDiffEst_Cond1;
 meanDiffEst_Cond2_offset = meanDiffEst_Cond2 - meanDiffEst_Cond1;
-p_crossTrial_Cond2 = (meanDiffEst_Cond2_diff_offset - meanDiffEst_Cond2_same_offset) ./ abs(meanDiffEst_Cond2_diff_offset);
+p_crossTrial_Cond2 = (meanDiffEst_Cond2_diff_offset - meanDiffEst_Cond2_same_offset) ./ meanDiffEst_Cond2_offset;
+p_crossTrial_Cond2(meanDiffEst_Cond2_offset<0) = [];
 
 meanDiffEst_Cond3_same_offset = meanDiffEst_Cond3_same - meanDiffEst_Cond1;
 meanDiffEst_Cond3_diff_offset = meanDiffEst_Cond3_diff - meanDiffEst_Cond1;
 meanDiffEst_Cond3_offset = meanDiffEst_Cond3 - meanDiffEst_Cond1;
-p_crossTrial_Cond3 = (meanDiffEst_Cond3_diff_offset - meanDiffEst_Cond3_same_offset) ./ abs(meanDiffEst_Cond3_diff_offset);
+p_crossTrial_Cond3 = (meanDiffEst_Cond3_diff_offset - meanDiffEst_Cond3_same_offset) ./ meanDiffEst_Cond3_offset;
+p_crossTrial_Cond3(meanDiffEst_Cond3_offset<0) = [];
 
 %% Plot the results
 colorName = {'Pink', 'Brown', 'Olive', 'Teal', 'Blue', 'Black', 'Red', 'Orange', 'Yellow',...
@@ -377,9 +379,9 @@ ylabel('Mean angle - different (deg)')
 figure
 subplot(1, 2, 1)
 hold on
-mean_p_2 = median(p_crossTrial_Cond2);
+median_p_2 = median(p_crossTrial_Cond2);
 sem_p_2 = std(p_crossTrial_Cond2) / length(p_crossTrial_Cond2);
-plot([0 length(p_crossTrial_Cond2)+1], [mean_p_2 mean_p_2], '--k') 
+plot([0 length(p_crossTrial_Cond2)+1], [median_p_2 median_p_2], '--k') 
 bar(1:length(p_crossTrial_Cond2), p_crossTrial_Cond2)
 xlabel('Subject')
 ylabel('Fraction of repulsion explained by cross-trial adaptation')
@@ -387,9 +389,9 @@ title('Condition 2')
 
 subplot(1, 2, 2)
 hold on
-mean_p_3 = median(p_crossTrial_Cond3);
+median_p_3 = median(p_crossTrial_Cond3);
 sem_p_3 = std(p_crossTrial_Cond3) / length(p_crossTrial_Cond3);
-plot([0 length(p_crossTrial_Cond3)+1], [mean_p_3 mean_p_3], '--k') 
+plot([0 length(p_crossTrial_Cond3)+1], [median_p_3 median_p_3], '--k') 
 bar(1:length(p_crossTrial_Cond3), p_crossTrial_Cond3)
 xlabel('Subject')
 ylabel('Fraction of repulsion explained by cross-trial adaptation')
@@ -403,6 +405,6 @@ for ii = 1 : length(colorName)
 end
 hold on
 plot([0 3], [1 1], '--k')
-errorBarGraph([mean_p_2; mean_p_3], [mean_p_2-sem_p_2; mean_p_3-sem_p_3], [mean_p_2+sem_p_2; mean_p_3+sem_p_3], colorIndex)
+errorBarGraph([median_p_2; median_p_3], [median_p_2-sem_p_2; median_p_3-sem_p_3], [median_p_2+sem_p_2; median_p_3+sem_p_3], colorIndex)
 box off
 ylabel('Fraction of repulsion explained by cross-trial adaptation')

@@ -15,7 +15,7 @@ minPlot = 10;
 maxPlot = 83;
 
 
-%% Condition 1 - Model 1
+%% Condition 1 - 1 line
 subplot(3, 5, 1)
 hold on
 plot([minPlot maxPlot], [minPlot maxPlot], 'k')
@@ -59,7 +59,7 @@ xlim([min(-2, min(diffEst_data)-1) max(diffEst_data)+1])
 axis square
 title(['Mean :' num2str(roundn(diffEst_mean_data, 1)) ', Std: ' num2str(roundn(nanstd(diffEst_data), 1))]) 
 
-%% Condition 2 - Model 2a
+%% Condition 2 - 2 line
 subplot(3, 5, 2)
 hold on
 plot([minPlot maxPlot], [minPlot maxPlot], 'k')
@@ -97,7 +97,7 @@ xlim([min(-2, min(diffEst_data)-1) max(diffEst_data)+1])
 axis square
 title(['Mean :' num2str(roundn(diffEst_mean_data, 1)) ', Std: ' num2str(roundn(nanstd(diffEst_data), 1))]) 
 
-%% Condition 3 - Model 2b
+%% Condition 3 - 2 line with blank - sensory
 subplot(3, 5, 3)
 hold on
 percentCorrect = 100 * sum(estimate_cond3_1(2, :) > estimate_cond3_1(1, :)) / n_trial_model;
@@ -138,7 +138,7 @@ xlim([min(-2, min(diffEst_data)-1) max(diffEst_data)+1])
 axis square
 title(['Mean :' num2str(roundn(diffEst_mean_data, 1)) ', Std: ' num2str(roundn(nanstd(diffEst_data), 1))])   
 
-%% Condition 3 - Model 2c
+%% Condition 3 - 2 line with blank - memory
 subplot(3, 5, 4)
 hold on
 percentCorrect = 100 * sum(estimate_cond3_2(2, :) > estimate_cond3_2(1, :)) / n_trial_model;
@@ -179,7 +179,7 @@ xlim([min(-2, min(diffEst_data)-1) max(diffEst_data)+1])
 axis square
 title(['Mean :' num2str(roundn(diffEst_mean_data, 1)) ', Std: ' num2str(roundn(nanstd(diffEst_data), 1))])   
 
-%% Condition 3 - Model 2d
+%% Condition 3 - 2 line with blank - estimate
 subplot(3, 5, 5)
 hold on
 percentCorrect = 100 * sum(estimate_cond3_3(2, :) > estimate_cond3_3(1, :)) / n_trial_model;
