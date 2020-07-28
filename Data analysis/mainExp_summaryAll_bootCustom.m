@@ -10,7 +10,7 @@ markerSize = 8;
 lineWidth = 0.5;
 alpha = 0.05;
 plotIndividualSubject = 0;
-excludeIncorrectTrial = 2; % 0: all trials
+excludeIncorrectTrial = 0; % 0: all trials
                            % 1: correct trials
                            % 2: all trials but flip incorrect trials across diagonal line
 meanDiffEst_Cond1 = NaN(4, length(subjectAll));
@@ -149,7 +149,6 @@ for ss = 1 : length(subjectAll)
     estimateStim2_collapse = estimateStim2_collapse(~isnan(estimateStim2_collapse));
     estimateStim1_collapse(estimateStim1_collapse<0) = estimateStim1_collapse(estimateStim1_collapse<0)+180;
     estimateStim2_collapse(estimateStim2_collapse<0) = estimateStim2_collapse(estimateStim2_collapse<0)+180;
-
     
     % Std of first and second estimate
     std_estStim1Est1 = nanstd(estimateLine1(indStim1Est1));
@@ -232,7 +231,7 @@ for ss = 1 : length(subjectAll)
     std_Cond3_split(2, ss) = std_est2_Cond3; 
 end
 
-%% Plot the results
+%% Plot summary statistic individual subject
 colorName = {'Pink', 'Brown', 'Olive', 'Teal', 'Blue', 'Black', 'Red', 'Orange', 'Yellow',...
             'Lime', 'Cyan', 'DarkViolet', 'Magenta', 'Gray', 'RosyBrown', 'PaleGreen' };
 colorIndex = NaN(length(colorName), 3);
@@ -361,6 +360,7 @@ axis square
 xlabel('Percent correct - Cond1 (deg)')
 ylabel('Percent correct - Cond3 (deg)')
 
+%% Plot comparing condition 2 and 3 and comparing std
 figure;
 hold on
 subplot(1, 2, 1)

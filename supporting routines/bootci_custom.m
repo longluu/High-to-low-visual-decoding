@@ -41,22 +41,26 @@ bootStat_all = [meanDiff_boot corr_boot percentCorrect_boot];
 
 %% Compute the statistics on actual samples
 % Mean and correlation
-if excludeIncorrectTrial == 0
-    if experiment_condition == 1
-        meanDiff_sample = mean(meanDiff_boot);
-        corr_sample = mean(corr_boot);
-    else
+if experiment_condition == 1
+    meanDiff_sample = mean(meanDiff_boot);
+    corr_sample = mean(corr_boot);
+else
+    if excludeIncorrectTrial == 0
         meanDiff_sample = mean(estimateStim2_collapse) - mean(estimateStim1_collapse);
         corr_sample = corr(estimateStim2_collapse, estimateStim1_collapse);
-    end
-else
-    if experiment_condition == 1
-        meanDiff_sample = mean(meanDiff_boot);
-        corr_sample = mean(corr_boot);
-    else
+    elseif excludeIncorrectTrial == 1
         diffEst_original = estimateStim2_collapse - estimateStim1_collapse;    
         meanDiff_sample = mean(estimateStim2_collapse(diffEst_original>0)) - mean(estimateStim1_collapse(diffEst_original>0));
         corr_sample = corr(estimateStim2_collapse(diffEst_original>0), estimateStim1_collapse(diffEst_original>0));
+    elseif excludeIncorrectTrial == 2
+        diffEst_original = estimateStim2_collapse - estimateStim1_collapse;  
+        indFlip = diffEst_original < 0; % flip the incorrect trials
+        estStim1 = estimateStim1_collapse;
+        estStim2 = estimateStim2_collapse;
+        estStim1(indFlip) = estimateStim2_collapse(indFlip);
+        estStim2(indFlip) = estimateStim1_collapse(indFlip);
+        meanDiff_sample = mean(estStim2) - mean(estStim1);
+        corr_sample = corr(estStim2, estStim1);        
     end
 end
 
