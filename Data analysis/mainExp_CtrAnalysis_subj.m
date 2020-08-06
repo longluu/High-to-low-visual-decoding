@@ -634,208 +634,394 @@ title('Collapse condition 2 and 3')
 ylabel('Fraction of repulsion explained by cross-trial adaptation')
 xlabel('Cumulative n-back')
 
-% %% Plot the results for 2-back cum
-% meanDiffEst_Cond2_same_offset = meanDiffEst_Cond2_same_2back_cum - meanDiffEst_Cond1;
-% meanDiffEst_Cond2_diff_offset = meanDiffEst_Cond2_diff_2back_cum - meanDiffEst_Cond1;
-% p_crossTrial_Cond2_2back_cum = (meanDiffEst_Cond2_diff_offset - meanDiffEst_Cond2_same_offset) ./ (meanDiffEst_Cond2_diff_offset + meanDiffEst_Cond2_same_offset);
-% p_crossTrial_Cond2_2back_cum(isnan(p_crossTrial_Cond2_2back_cum) | abs(p_crossTrial_Cond2_2back_cum)>1) = NaN;
-% 
-% meanDiffEst_Cond3_same_offset = meanDiffEst_Cond3_same_2back_cum - meanDiffEst_Cond1;
-% meanDiffEst_Cond3_diff_offset = meanDiffEst_Cond3_diff_2back_cum - meanDiffEst_Cond1;
-% p_crossTrial_Cond3_2back_cum = (meanDiffEst_Cond3_diff_offset - meanDiffEst_Cond3_same_offset) ./ (meanDiffEst_Cond3_diff_offset + meanDiffEst_Cond3_same_offset);
-% p_crossTrial_Cond3_2back_cum(isnan(p_crossTrial_Cond3_2back_cum) | abs(p_crossTrial_Cond3_2back_cum)>1) = NaN;
-% 
-% colorName = {'Pink', 'Brown', 'Olive', 'Teal', 'Blue', 'Black', 'Red', 'Orange', 'Yellow',...
-%             'Lime', 'Cyan', 'DarkViolet', 'Magenta', 'Gray', 'RosyBrown', 'PaleGreen' };
-% colorIndex = NaN(length(colorName), 3);
-% for ii = 1 : length(colorName)
-%     colorIndex(ii, :) = rgb(colorName{ii});
-% end
-% 
-% figure
-% minPlot_diffEst = min([meanDiffEst_Cond2_same_2back_cum meanDiffEst_Cond2_diff_2back_cum meanDiffEst_Cond3_same_2back_cum meanDiffEst_Cond3_diff_2back_cum]) - 2;
-% maxPlot_diffEst = max([meanDiffEst_Cond2_same_2back_cum meanDiffEst_Cond2_diff_2back_cum meanDiffEst_Cond3_same_2back_cum meanDiffEst_Cond3_diff_2back_cum]) + 2;
-% hold on
-% 
-% subplot(1, 3, 1)
-% hold on
-% plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
-% for ii = 1 : length(subjectAll)
-%     plot(meanDiffEst_Cond1_same(ii), meanDiffEst_Cond1_diff(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
-% end
-% axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
-% axis square
-% title('Cond 1')
-% xlabel('mean angle - same (deg)')
-% ylabel('mean angle - different (deg)')
-% 
-% subplot(1, 3, 2)
-% hold on
-% plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
-% for ii = 1 : length(subjectAll)
-%     plot(meanDiffEst_Cond2_same_2back_cum(ii), meanDiffEst_Cond2_diff_2back_cum(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
-% end
-% axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
-% axis square
-% title('Cond 2')
-% xlabel('mean angle - same (deg)')
-% ylabel('mean angle - different (deg)')
-% 
-% subplot(1, 3, 3)
-% hold on
-% plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
-% for ii = 1 : length(subjectAll)
-%     plot(meanDiffEst_Cond3_same_2back_cum(ii), meanDiffEst_Cond3_diff_2back_cum(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
-% end
-% axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
-% axis square
-% title('Cond 3')
-% xlabel('mean angle - same (deg)')
-% ylabel('mean angle - different (deg)')
-% 
-% figure
-% subplot(1, 2, 1)
-% hold on
-% nanmedian_p_2 = nanmedian(p_crossTrial_Cond2_2back_cum);
-% sem_p_2 = nanstd(p_crossTrial_Cond2_2back_cum) / length(p_crossTrial_Cond2_2back_cum);
-% plot([0 length(p_crossTrial_Cond2_2back_cum)+1], [nanmedian_p_2 nanmedian_p_2], '--k') 
-% bar(1:length(p_crossTrial_Cond2_2back_cum), p_crossTrial_Cond2_2back_cum)
-% xlabel('Subject')
-% ylabel('Fraction of repulsion explained by cross-trial adaptation')
-% title('Condition 2')
-% 
-% subplot(1, 2, 2)
-% hold on
-% nanmedian_p_3 = nanmedian(p_crossTrial_Cond3_2back_cum);
-% sem_p_3 = nanstd(p_crossTrial_Cond3_2back_cum) / length(p_crossTrial_Cond3_2back_cum);
-% plot([0 length(p_crossTrial_Cond3_2back_cum)+1], [nanmedian_p_3 nanmedian_p_3], '--k') 
-% bar(1:length(p_crossTrial_Cond3_2back_cum), p_crossTrial_Cond3_2back_cum)
-% xlabel('Subject')
-% ylabel('Fraction of repulsion explained by cross-trial adaptation')
-% title('Condition 3')
-% 
-% figure
-% colorName = {'Crimson', 'DarkOrange', 'Teal', 'DodgerBlue'};
-% colorIndex = NaN(length(colorName), 3);
-% for ii = 1 : length(colorName)
-%     colorIndex(ii, :) = rgb(colorName{ii});
-% end
-% hold on
-% plot([0 3], [1 1], '--k')
-% errorBarGraph([nanmedian_p_2; nanmedian_p_3], [nanmedian_p_2-sem_p_2; nanmedian_p_3-sem_p_3], [nanmedian_p_2+sem_p_2; nanmedian_p_3+sem_p_3], colorIndex)
-% box off
-% title('2-back cum')
-% ylabel('Fraction of repulsion explained by cross-trial adaptation')
-% 
-% %% Plot the results for 3-back cum
-% meanDiffEst_Cond2_same_offset = meanDiffEst_Cond2_same_3back_cum - meanDiffEst_Cond1;
-% meanDiffEst_Cond2_diff_offset = meanDiffEst_Cond2_diff_3back_cum - meanDiffEst_Cond1;
-% p_crossTrial_Cond2_3back_cum = (meanDiffEst_Cond2_diff_offset - meanDiffEst_Cond2_same_offset) ./ (meanDiffEst_Cond2_diff_offset + meanDiffEst_Cond2_same_offset);
-% p_crossTrial_Cond2_3back_cum(isnan(p_crossTrial_Cond2_3back_cum) | abs(p_crossTrial_Cond2_3back_cum)>5) = NaN;
-% 
-% meanDiffEst_Cond3_same_offset = meanDiffEst_Cond3_same_3back_cum - meanDiffEst_Cond1;
-% meanDiffEst_Cond3_diff_offset = meanDiffEst_Cond3_diff_3back_cum - meanDiffEst_Cond1;
-% p_crossTrial_Cond3_3back_cum = (meanDiffEst_Cond3_diff_offset - meanDiffEst_Cond3_same_offset) ./ (meanDiffEst_Cond3_diff_offset + meanDiffEst_Cond3_same_offset);
-% p_crossTrial_Cond3_3back_cum(isnan(p_crossTrial_Cond3_3back_cum)  | abs(p_crossTrial_Cond3_3back_cum)>5) = NaN;
-% 
-% colorName = {'Pink', 'Brown', 'Olive', 'Teal', 'Blue', 'Black', 'Red', 'Orange', 'Yellow',...
-%             'Lime', 'Cyan', 'DarkViolet', 'Magenta', 'Gray', 'RosyBrown', 'PaleGreen' };
-% colorIndex = NaN(length(colorName), 3);
-% for ii = 1 : length(colorName)
-%     colorIndex(ii, :) = rgb(colorName{ii});
-% end
-% 
-% figure
-% minPlot_diffEst = min([meanDiffEst_Cond2_same_3back_cum meanDiffEst_Cond2_diff_3back_cum meanDiffEst_Cond3_same_3back_cum meanDiffEst_Cond3_diff_3back_cum]) - 2;
-% maxPlot_diffEst = max([meanDiffEst_Cond2_same_3back_cum meanDiffEst_Cond2_diff_3back_cum meanDiffEst_Cond3_same_3back_cum meanDiffEst_Cond3_diff_3back_cum]) + 2;
-% hold on
-% 
-% subplot(1, 3, 1)
-% hold on
-% plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
-% for ii = 1 : length(subjectAll)
-%     plot(meanDiffEst_Cond1_same(ii), meanDiffEst_Cond1_diff(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
-% end
-% axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
-% axis square
-% title('Cond 1')
-% xlabel('mean angle - same (deg)')
-% ylabel('mean angle - different (deg)')
-% 
-% subplot(1, 3, 2)
-% hold on
-% plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
-% for ii = 1 : length(subjectAll)
-%     plot(meanDiffEst_Cond2_same_3back_cum(ii), meanDiffEst_Cond2_diff_3back_cum(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
-% end
-% axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
-% axis square
-% title('Cond 2')
-% xlabel('mean angle - same (deg)')
-% ylabel('mean angle - different (deg)')
-% 
-% subplot(1, 3, 3)
-% hold on
-% plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
-% for ii = 1 : length(subjectAll)
-%     plot(meanDiffEst_Cond3_same_3back_cum(ii), meanDiffEst_Cond3_diff_3back_cum(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
-% end
-% axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
-% axis square
-% title('Cond 3')
-% xlabel('mean angle - same (deg)')
-% ylabel('mean angle - different (deg)')
-% 
-% figure
-% subplot(1, 2, 1)
-% hold on
-% nanmedian_p_2 = nanmedian(p_crossTrial_Cond2_3back_cum);
-% sem_p_2 = nanstd(p_crossTrial_Cond2_3back_cum) / length(p_crossTrial_Cond2_3back_cum);
-% plot([0 length(p_crossTrial_Cond2_3back_cum)+1], [nanmedian_p_2 nanmedian_p_2], '--k') 
-% bar(1:length(p_crossTrial_Cond2_3back_cum), p_crossTrial_Cond2_3back_cum)
-% xlabel('Subject')
-% ylabel('Fraction of repulsion explained by cross-trial adaptation')
-% title('Condition 2')
-% 
-% subplot(1, 2, 2)
-% hold on
-% nanmedian_p_3 = nanmedian(p_crossTrial_Cond3_3back_cum);
-% sem_p_3 = nanstd(p_crossTrial_Cond3_3back_cum) / length(p_crossTrial_Cond3_3back_cum);
-% plot([0 length(p_crossTrial_Cond3_3back_cum)+1], [nanmedian_p_3 nanmedian_p_3], '--k') 
-% bar(1:length(p_crossTrial_Cond3_3back_cum), p_crossTrial_Cond3_3back_cum)
-% xlabel('Subject')
-% ylabel('Fraction of repulsion explained by cross-trial adaptation')
-% title('Condition 3')
-% 
-% figure
-% colorName = {'Crimson', 'DarkOrange', 'Teal', 'DodgerBlue'};
-% colorIndex = NaN(length(colorName), 3);
-% for ii = 1 : length(colorName)
-%     colorIndex(ii, :) = rgb(colorName{ii});
-% end
-% hold on
-% plot([0 3], [1 1], '--k')
-% errorBarGraph([nanmedian_p_2; nanmedian_p_3], [nanmedian_p_2-sem_p_2; nanmedian_p_3-sem_p_3], [nanmedian_p_2+sem_p_2; nanmedian_p_3+sem_p_3], colorIndex)
-% box off
-% title('3-back cum')
-% ylabel('Fraction of repulsion explained by cross-trial adaptation')
-% 
-% %% Plot the results for all back cumulative trials
-% p_crossTrial_2back_cum = [p_crossTrial_Cond2_2back_cum p_crossTrial_Cond3_2back_cum];
-% p_crossTrial_3back_cum = [p_crossTrial_Cond2_3back_cum p_crossTrial_Cond3_3back_cum];
-% 
-% mean_p_2back_cum = nanmedian(p_crossTrial_2back_cum);
-% sem_p_2back_cum = nanstd(p_crossTrial_2back_cum) / length(p_crossTrial_2back_cum);
-% mean_p_3back_cum = nanmedian(p_crossTrial_3back_cum);
-% sem_p_3back_cum = nanstd(p_crossTrial_3back_cum) / length(p_crossTrial_3back_cum);
-% 
-% figure
-% hold on
-% plot([0 5], [1 1], '--k')
-% errorBarGraph([mean_p_1back; mean_p_2back_cum; mean_p_3back_cum], ...
-%     [mean_p_1back-sem_p_1back; mean_p_2back_cum-sem_p_2back_cum; mean_p_3back_cum-sem_p_3back_cum], ...
-%     [mean_p_1back+sem_p_1back; mean_p_2back_cum+sem_p_2back_cum; mean_p_3back_cum+sem_p_3back_cum], colorIndex)
-% box off
-% title('Collapse condition 2 and 3')
-% ylabel('Fraction of repulsion explained by cross-trial adaptation')
-% xlabel('Cumulative n-back')
+%% Plot the results for 2-back cum
+meanDiffEst_Cond2_same_offset = meanDiffEst_Cond2_same_2back_cum - meanDiffEst_Cond1;
+meanDiffEst_Cond2_diff_offset = meanDiffEst_Cond2_diff_2back_cum - meanDiffEst_Cond1;
+p_crossTrial_Cond2_2back_cum = (meanDiffEst_Cond2_diff_offset - meanDiffEst_Cond2_same_offset) ./ (meanDiffEst_Cond2_diff_offset + meanDiffEst_Cond2_same_offset);
+p_crossTrial_Cond2_2back_cum(isnan(p_crossTrial_Cond2_2back_cum)) = NaN;
+
+meanDiffEst_Cond3_same_offset = meanDiffEst_Cond3_same_2back_cum - meanDiffEst_Cond1;
+meanDiffEst_Cond3_diff_offset = meanDiffEst_Cond3_diff_2back_cum - meanDiffEst_Cond1;
+p_crossTrial_Cond3_2back_cum = (meanDiffEst_Cond3_diff_offset - meanDiffEst_Cond3_same_offset) ./ (meanDiffEst_Cond3_diff_offset + meanDiffEst_Cond3_same_offset);
+p_crossTrial_Cond3_2back_cum(isnan(p_crossTrial_Cond3_2back_cum) | abs(p_crossTrial_Cond3_2back_cum)>1) = NaN;
+
+colorName = {'Pink', 'Brown', 'Olive', 'Teal', 'Blue', 'Black', 'Red', 'Orange', 'Yellow',...
+            'Lime', 'Cyan', 'DarkViolet', 'Magenta', 'Gray', 'RosyBrown', 'PaleGreen' };
+colorIndex = NaN(length(colorName), 3);
+for ii = 1 : length(colorName)
+    colorIndex(ii, :) = rgb(colorName{ii});
+end
+
+figure
+minPlot_diffEst = min([meanDiffEst_Cond2_same_2back_cum meanDiffEst_Cond2_diff_2back_cum meanDiffEst_Cond3_same_2back_cum meanDiffEst_Cond3_diff_2back_cum]) - 2;
+maxPlot_diffEst = max([meanDiffEst_Cond2_same_2back_cum meanDiffEst_Cond2_diff_2back_cum meanDiffEst_Cond3_same_2back_cum meanDiffEst_Cond3_diff_2back_cum]) + 2;
+hold on
+
+subplot(1, 3, 1)
+hold on
+plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
+for ii = 1 : length(subjectAll)
+    plot(meanDiffEst_Cond1_same(ii), meanDiffEst_Cond1_diff(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+end
+axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
+axis square
+title('Cond 1')
+xlabel('mean angle - same (deg)')
+ylabel('mean angle - different (deg)')
+
+subplot(1, 3, 2)
+hold on
+plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
+for ii = 1 : length(subjectAll)
+    plot(meanDiffEst_Cond2_same_2back_cum(ii), meanDiffEst_Cond2_diff_2back_cum(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+end
+axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
+axis square
+title('Cond 2')
+xlabel('mean angle - same (deg)')
+ylabel('mean angle - different (deg)')
+
+subplot(1, 3, 3)
+hold on
+plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
+for ii = 1 : length(subjectAll)
+    plot(meanDiffEst_Cond3_same_2back_cum(ii), meanDiffEst_Cond3_diff_2back_cum(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+end
+axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
+axis square
+title('Cond 3')
+xlabel('mean angle - same (deg)')
+ylabel('mean angle - different (deg)')
+
+figure
+subplot(1, 2, 1)
+hold on
+nanmedian_p_2 = nanmedian(p_crossTrial_Cond2_2back_cum);
+sem_p_2 = nanstd(p_crossTrial_Cond2_2back_cum) / length(p_crossTrial_Cond2_2back_cum);
+plot([0 length(p_crossTrial_Cond2_2back_cum)+1], [nanmedian_p_2 nanmedian_p_2], '--k') 
+bar(1:length(p_crossTrial_Cond2_2back_cum), p_crossTrial_Cond2_2back_cum)
+xlabel('Subject')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+title('Condition 2')
+
+subplot(1, 2, 2)
+hold on
+nanmedian_p_3 = nanmedian(p_crossTrial_Cond3_2back_cum);
+sem_p_3 = nanstd(p_crossTrial_Cond3_2back_cum) / length(p_crossTrial_Cond3_2back_cum);
+plot([0 length(p_crossTrial_Cond3_2back_cum)+1], [nanmedian_p_3 nanmedian_p_3], '--k') 
+bar(1:length(p_crossTrial_Cond3_2back_cum), p_crossTrial_Cond3_2back_cum)
+xlabel('Subject')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+title('Condition 3')
+
+figure
+colorName = {'Crimson', 'DarkOrange', 'Teal', 'DodgerBlue'};
+colorIndex = NaN(length(colorName), 3);
+for ii = 1 : length(colorName)
+    colorIndex(ii, :) = rgb(colorName{ii});
+end
+hold on
+plot([0 3], [1 1], '--k')
+errorBarGraph([nanmedian_p_2; nanmedian_p_3], [nanmedian_p_2-sem_p_2; nanmedian_p_3-sem_p_3], [nanmedian_p_2+sem_p_2; nanmedian_p_3+sem_p_3], colorIndex)
+box off
+title('2-back cum')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+
+%% Plot the results for 3-back cum
+meanDiffEst_Cond2_same_offset = meanDiffEst_Cond2_same_3back_cum - meanDiffEst_Cond1;
+meanDiffEst_Cond2_diff_offset = meanDiffEst_Cond2_diff_3back_cum - meanDiffEst_Cond1;
+p_crossTrial_Cond2_3back_cum = (meanDiffEst_Cond2_diff_offset - meanDiffEst_Cond2_same_offset) ./ (meanDiffEst_Cond2_diff_offset + meanDiffEst_Cond2_same_offset);
+p_crossTrial_Cond2_3back_cum(isnan(p_crossTrial_Cond2_3back_cum)) = NaN;
+
+meanDiffEst_Cond3_same_offset = meanDiffEst_Cond3_same_3back_cum - meanDiffEst_Cond1;
+meanDiffEst_Cond3_diff_offset = meanDiffEst_Cond3_diff_3back_cum - meanDiffEst_Cond1;
+p_crossTrial_Cond3_3back_cum = (meanDiffEst_Cond3_diff_offset - meanDiffEst_Cond3_same_offset) ./ (meanDiffEst_Cond3_diff_offset + meanDiffEst_Cond3_same_offset);
+p_crossTrial_Cond3_3back_cum(isnan(p_crossTrial_Cond3_3back_cum)  | abs(p_crossTrial_Cond3_3back_cum)>5) = NaN;
+
+colorName = {'Pink', 'Brown', 'Olive', 'Teal', 'Blue', 'Black', 'Red', 'Orange', 'Yellow',...
+            'Lime', 'Cyan', 'DarkViolet', 'Magenta', 'Gray', 'RosyBrown', 'PaleGreen' };
+colorIndex = NaN(length(colorName), 3);
+for ii = 1 : length(colorName)
+    colorIndex(ii, :) = rgb(colorName{ii});
+end
+
+figure
+minPlot_diffEst = min([meanDiffEst_Cond2_same_3back_cum meanDiffEst_Cond2_diff_3back_cum meanDiffEst_Cond3_same_3back_cum meanDiffEst_Cond3_diff_3back_cum]) - 2;
+maxPlot_diffEst = max([meanDiffEst_Cond2_same_3back_cum meanDiffEst_Cond2_diff_3back_cum meanDiffEst_Cond3_same_3back_cum meanDiffEst_Cond3_diff_3back_cum]) + 2;
+hold on
+
+subplot(1, 3, 1)
+hold on
+plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
+for ii = 1 : length(subjectAll)
+    plot(meanDiffEst_Cond1_same(ii), meanDiffEst_Cond1_diff(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+end
+axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
+axis square
+title('Cond 1')
+xlabel('mean angle - same (deg)')
+ylabel('mean angle - different (deg)')
+
+subplot(1, 3, 2)
+hold on
+plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
+for ii = 1 : length(subjectAll)
+    plot(meanDiffEst_Cond2_same_3back_cum(ii), meanDiffEst_Cond2_diff_3back_cum(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+end
+axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
+axis square
+title('Cond 2')
+xlabel('mean angle - same (deg)')
+ylabel('mean angle - different (deg)')
+
+subplot(1, 3, 3)
+hold on
+plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
+for ii = 1 : length(subjectAll)
+    plot(meanDiffEst_Cond3_same_3back_cum(ii), meanDiffEst_Cond3_diff_3back_cum(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+end
+axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
+axis square
+title('Cond 3')
+xlabel('mean angle - same (deg)')
+ylabel('mean angle - different (deg)')
+
+figure
+subplot(1, 2, 1)
+hold on
+nanmedian_p_2 = nanmedian(p_crossTrial_Cond2_3back_cum);
+sem_p_2 = nanstd(p_crossTrial_Cond2_3back_cum) / length(p_crossTrial_Cond2_3back_cum);
+plot([0 length(p_crossTrial_Cond2_3back_cum)+1], [nanmedian_p_2 nanmedian_p_2], '--k') 
+bar(1:length(p_crossTrial_Cond2_3back_cum), p_crossTrial_Cond2_3back_cum)
+xlabel('Subject')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+title('Condition 2')
+
+subplot(1, 2, 2)
+hold on
+nanmedian_p_3 = nanmedian(p_crossTrial_Cond3_3back_cum);
+sem_p_3 = nanstd(p_crossTrial_Cond3_3back_cum) / length(p_crossTrial_Cond3_3back_cum);
+plot([0 length(p_crossTrial_Cond3_3back_cum)+1], [nanmedian_p_3 nanmedian_p_3], '--k') 
+bar(1:length(p_crossTrial_Cond3_3back_cum), p_crossTrial_Cond3_3back_cum)
+xlabel('Subject')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+title('Condition 3')
+
+figure
+colorName = {'Crimson', 'DarkOrange', 'Teal', 'DodgerBlue'};
+colorIndex = NaN(length(colorName), 3);
+for ii = 1 : length(colorName)
+    colorIndex(ii, :) = rgb(colorName{ii});
+end
+hold on
+plot([0 3], [1 1], '--k')
+errorBarGraph([nanmedian_p_2; nanmedian_p_3], [nanmedian_p_2-sem_p_2; nanmedian_p_3-sem_p_3], [nanmedian_p_2+sem_p_2; nanmedian_p_3+sem_p_3], colorIndex)
+box off
+title('3-back cum')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+
+%% Plot the results for 3-back cum
+meanDiffEst_Cond2_same_offset = meanDiffEst_Cond2_same_3back_cum - meanDiffEst_Cond1;
+meanDiffEst_Cond2_diff_offset = meanDiffEst_Cond2_diff_3back_cum - meanDiffEst_Cond1;
+p_crossTrial_Cond2_3back_cum = (meanDiffEst_Cond2_diff_offset - meanDiffEst_Cond2_same_offset) ./ (meanDiffEst_Cond2_diff_offset + meanDiffEst_Cond2_same_offset);
+p_crossTrial_Cond2_3back_cum(isnan(p_crossTrial_Cond2_3back_cum)) = NaN;
+
+meanDiffEst_Cond3_same_offset = meanDiffEst_Cond3_same_3back_cum - meanDiffEst_Cond1;
+meanDiffEst_Cond3_diff_offset = meanDiffEst_Cond3_diff_3back_cum - meanDiffEst_Cond1;
+p_crossTrial_Cond3_3back_cum = (meanDiffEst_Cond3_diff_offset - meanDiffEst_Cond3_same_offset) ./ (meanDiffEst_Cond3_diff_offset + meanDiffEst_Cond3_same_offset);
+p_crossTrial_Cond3_3back_cum(isnan(p_crossTrial_Cond3_3back_cum)  | abs(p_crossTrial_Cond3_3back_cum)>5) = NaN;
+
+colorName = {'Pink', 'Brown', 'Olive', 'Teal', 'Blue', 'Black', 'Red', 'Orange', 'Yellow',...
+            'Lime', 'Cyan', 'DarkViolet', 'Magenta', 'Gray', 'RosyBrown', 'PaleGreen' };
+colorIndex = NaN(length(colorName), 3);
+for ii = 1 : length(colorName)
+    colorIndex(ii, :) = rgb(colorName{ii});
+end
+
+figure
+minPlot_diffEst = min([meanDiffEst_Cond2_same_3back_cum meanDiffEst_Cond2_diff_3back_cum meanDiffEst_Cond3_same_3back_cum meanDiffEst_Cond3_diff_3back_cum]) - 2;
+maxPlot_diffEst = max([meanDiffEst_Cond2_same_3back_cum meanDiffEst_Cond2_diff_3back_cum meanDiffEst_Cond3_same_3back_cum meanDiffEst_Cond3_diff_3back_cum]) + 2;
+hold on
+
+subplot(1, 3, 1)
+hold on
+plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
+for ii = 1 : length(subjectAll)
+    plot(meanDiffEst_Cond1_same(ii), meanDiffEst_Cond1_diff(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+end
+axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
+axis square
+title('Cond 1')
+xlabel('mean angle - same (deg)')
+ylabel('mean angle - different (deg)')
+
+subplot(1, 3, 2)
+hold on
+plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
+for ii = 1 : length(subjectAll)
+    plot(meanDiffEst_Cond2_same_3back_cum(ii), meanDiffEst_Cond2_diff_3back_cum(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+end
+axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
+axis square
+title('Cond 2')
+xlabel('mean angle - same (deg)')
+ylabel('mean angle - different (deg)')
+
+subplot(1, 3, 3)
+hold on
+plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
+for ii = 1 : length(subjectAll)
+    plot(meanDiffEst_Cond3_same_3back_cum(ii), meanDiffEst_Cond3_diff_3back_cum(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+end
+axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
+axis square
+title('Cond 3')
+xlabel('mean angle - same (deg)')
+ylabel('mean angle - different (deg)')
+
+figure
+subplot(1, 2, 1)
+hold on
+nanmedian_p_2 = nanmedian(p_crossTrial_Cond2_3back_cum);
+sem_p_2 = nanstd(p_crossTrial_Cond2_3back_cum) / length(p_crossTrial_Cond2_3back_cum);
+plot([0 length(p_crossTrial_Cond2_3back_cum)+1], [nanmedian_p_2 nanmedian_p_2], '--k') 
+bar(1:length(p_crossTrial_Cond2_3back_cum), p_crossTrial_Cond2_3back_cum)
+xlabel('Subject')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+title('Condition 2')
+
+subplot(1, 2, 2)
+hold on
+nanmedian_p_3 = nanmedian(p_crossTrial_Cond3_3back_cum);
+sem_p_3 = nanstd(p_crossTrial_Cond3_3back_cum) / length(p_crossTrial_Cond3_3back_cum);
+plot([0 length(p_crossTrial_Cond3_3back_cum)+1], [nanmedian_p_3 nanmedian_p_3], '--k') 
+bar(1:length(p_crossTrial_Cond3_3back_cum), p_crossTrial_Cond3_3back_cum)
+xlabel('Subject')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+title('Condition 3')
+
+figure
+colorName = {'Crimson', 'DarkOrange', 'Teal', 'DodgerBlue'};
+colorIndex = NaN(length(colorName), 3);
+for ii = 1 : length(colorName)
+    colorIndex(ii, :) = rgb(colorName{ii});
+end
+hold on
+plot([0 3], [1 1], '--k')
+errorBarGraph([nanmedian_p_2; nanmedian_p_3], [nanmedian_p_2-sem_p_2; nanmedian_p_3-sem_p_3], [nanmedian_p_2+sem_p_2; nanmedian_p_3+sem_p_3], colorIndex)
+box off
+title('3-back cum')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+
+%% Plot the results for 4-back cum
+meanDiffEst_Cond2_same_offset = meanDiffEst_Cond2_same_4back_cum - meanDiffEst_Cond1;
+meanDiffEst_Cond2_diff_offset = meanDiffEst_Cond2_diff_4back_cum - meanDiffEst_Cond1;
+p_crossTrial_Cond2_4back_cum = (meanDiffEst_Cond2_diff_offset - meanDiffEst_Cond2_same_offset) ./ (meanDiffEst_Cond2_diff_offset + meanDiffEst_Cond2_same_offset);
+p_crossTrial_Cond2_4back_cum(isnan(p_crossTrial_Cond2_4back_cum)) = NaN;
+
+meanDiffEst_Cond3_same_offset = meanDiffEst_Cond3_same_4back_cum - meanDiffEst_Cond1;
+meanDiffEst_Cond3_diff_offset = meanDiffEst_Cond3_diff_4back_cum - meanDiffEst_Cond1;
+p_crossTrial_Cond3_4back_cum = (meanDiffEst_Cond3_diff_offset - meanDiffEst_Cond3_same_offset) ./ (meanDiffEst_Cond3_diff_offset + meanDiffEst_Cond3_same_offset);
+p_crossTrial_Cond3_4back_cum(isnan(p_crossTrial_Cond3_4back_cum)  | abs(p_crossTrial_Cond3_4back_cum)>5) = NaN;
+
+colorName = {'Pink', 'Brown', 'Olive', 'Teal', 'Blue', 'Black', 'Red', 'Orange', 'Yellow',...
+            'Lime', 'Cyan', 'DarkViolet', 'Magenta', 'Gray', 'RosyBrown', 'PaleGreen' };
+colorIndex = NaN(length(colorName), 3);
+for ii = 1 : length(colorName)
+    colorIndex(ii, :) = rgb(colorName{ii});
+end
+
+figure
+minPlot_diffEst = min([meanDiffEst_Cond2_same_4back_cum meanDiffEst_Cond2_diff_4back_cum meanDiffEst_Cond3_same_4back_cum meanDiffEst_Cond3_diff_4back_cum]) - 2;
+maxPlot_diffEst = max([meanDiffEst_Cond2_same_4back_cum meanDiffEst_Cond2_diff_4back_cum meanDiffEst_Cond3_same_4back_cum meanDiffEst_Cond3_diff_4back_cum]) + 2;
+hold on
+
+subplot(1, 3, 1)
+hold on
+plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
+for ii = 1 : length(subjectAll)
+    plot(meanDiffEst_Cond1_same(ii), meanDiffEst_Cond1_diff(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+end
+axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
+axis square
+title('Cond 1')
+xlabel('mean angle - same (deg)')
+ylabel('mean angle - different (deg)')
+
+subplot(1, 3, 2)
+hold on
+plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
+for ii = 1 : length(subjectAll)
+    plot(meanDiffEst_Cond2_same_4back_cum(ii), meanDiffEst_Cond2_diff_4back_cum(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+end
+axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
+axis square
+title('Cond 2')
+xlabel('mean angle - same (deg)')
+ylabel('mean angle - different (deg)')
+
+subplot(1, 3, 3)
+hold on
+plot([minPlot_diffEst maxPlot_diffEst], [minPlot_diffEst maxPlot_diffEst], 'k')
+for ii = 1 : length(subjectAll)
+    plot(meanDiffEst_Cond3_same_4back_cum(ii), meanDiffEst_Cond3_diff_4back_cum(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+end
+axis([minPlot_diffEst, maxPlot_diffEst, minPlot_diffEst, maxPlot_diffEst])
+axis square
+title('Cond 3')
+xlabel('mean angle - same (deg)')
+ylabel('mean angle - different (deg)')
+
+figure
+subplot(1, 2, 1)
+hold on
+nanmedian_p_2 = nanmedian(p_crossTrial_Cond2_4back_cum);
+sem_p_2 = nanstd(p_crossTrial_Cond2_4back_cum) / length(p_crossTrial_Cond2_4back_cum);
+plot([0 length(p_crossTrial_Cond2_4back_cum)+1], [nanmedian_p_2 nanmedian_p_2], '--k') 
+bar(1:length(p_crossTrial_Cond2_4back_cum), p_crossTrial_Cond2_4back_cum)
+xlabel('Subject')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+title('Condition 2')
+
+subplot(1, 2, 2)
+hold on
+nanmedian_p_3 = nanmedian(p_crossTrial_Cond3_4back_cum);
+sem_p_3 = nanstd(p_crossTrial_Cond3_4back_cum) / length(p_crossTrial_Cond3_4back_cum);
+plot([0 length(p_crossTrial_Cond3_4back_cum)+1], [nanmedian_p_3 nanmedian_p_3], '--k') 
+bar(1:length(p_crossTrial_Cond3_4back_cum), p_crossTrial_Cond3_4back_cum)
+xlabel('Subject')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+title('Condition 3')
+
+figure
+colorName = {'Crimson', 'DarkOrange', 'Teal', 'DodgerBlue'};
+colorIndex = NaN(length(colorName), 3);
+for ii = 1 : length(colorName)
+    colorIndex(ii, :) = rgb(colorName{ii});
+end
+hold on
+plot([0 3], [1 1], '--k')
+errorBarGraph([nanmedian_p_2; nanmedian_p_3], [nanmedian_p_2-sem_p_2; nanmedian_p_3-sem_p_3], [nanmedian_p_2+sem_p_2; nanmedian_p_3+sem_p_3], colorIndex)
+box off
+title('4-back cum')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+
+%% Plot the results for all back cumulative trials
+p_crossTrial_2back_cum = [p_crossTrial_Cond2_2back_cum p_crossTrial_Cond3_2back_cum];
+p_crossTrial_3back_cum = [p_crossTrial_Cond2_3back_cum p_crossTrial_Cond3_3back_cum];
+
+mean_p_2back_cum = nanmedian(p_crossTrial_2back_cum);
+sem_p_2back_cum = nanstd(p_crossTrial_2back_cum) / length(p_crossTrial_2back_cum);
+mean_p_3back_cum = nanmedian(p_crossTrial_3back_cum);
+sem_p_3back_cum = nanstd(p_crossTrial_3back_cum) / length(p_crossTrial_3back_cum);
+
+figure
+hold on
+plot([0 5], [1 1], '--k')
+errorBarGraph([mean_p_1back; mean_p_2back_cum; mean_p_3back_cum], ...
+    [mean_p_1back-sem_p_1back; mean_p_2back_cum-sem_p_2back_cum; mean_p_3back_cum-sem_p_3back_cum], ...
+    [mean_p_1back+sem_p_1back; mean_p_2back_cum+sem_p_2back_cum; mean_p_3back_cum+sem_p_3back_cum], colorIndex)
+box off
+title('Collapse condition 2 and 3')
+ylabel('Fraction of repulsion explained by cross-trial adaptation')
+xlabel('Cumulative n-back')
