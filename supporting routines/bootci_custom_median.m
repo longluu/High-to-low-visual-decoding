@@ -1,11 +1,11 @@
-function [confInterval_all, sampleStat_all, bootStat_all] = bootci_custom(nBootstrap, excludeIncorrectTrial, experiment_condition, alpha, estimateStim1_collapse, estimateStim2_collapse)
+function [confInterval_all, sampleStat_all, bootStat_all] = bootci_custom_median(nBootstrap, excludeIncorrectTrial, experiment_condition, alpha, estimateStim1_collapse, estimateStim2_collapse)
 %%% We cannot use the built-in bootci because it resamples the input matrix
 %%% in pair so we cannot apply it for condition 1 (we want independent
 %%% resampling of two reports)
 %% Compute the statistics on bootstrap samples
 nEstStim1 = length(estimateStim1_collapse);
 nEstStim2 = length(estimateStim2_collapse);
-meanDiff_boot = NaN(nBootstrap, 1);
+medianDiff_boot = NaN(nBootstrap, 1);
 corr_boot = NaN(nBootstrap, 1);
 percentCorrect_boot = NaN(nBootstrap, 1);
 for ii = 1 : nBootstrap
@@ -35,25 +35,25 @@ for ii = 1 : nBootstrap
         estimateStim2_bootstrap(indFlip) = estStim1_swap;                    
     end
     
-    % Compute mean and correlation
-    meanDiff_boot(ii) = mean(estimateStim2_bootstrap(indInclude)) - mean(estimateStim1_bootstrap(indInclude));
+    % Compute median and correlation
+    medianDiff_boot(ii) = median(estimateStim2_bootstrap(indInclude)) - median(estimateStim1_bootstrap(indInclude));
     corr_boot(ii) = corr(estimateStim1_bootstrap(indInclude),...
                                 estimateStim2_bootstrap(indInclude));
 end   
-bootStat_all = [meanDiff_boot corr_boot percentCorrect_boot];
+bootStat_all = [medianDiff_boot corr_boot percentCorrect_boot];
 
 %% Compute the statistics on actual samples
-% Mean and correlation
+% median and correlation
 if experiment_condition == 1
-    meanDiff_sample = mean(meanDiff_boot);
-    corr_sample = mean(corr_boot);
+    medianDiff_sample = median(medianDiff_boot);
+    corr_sample = median(corr_boot);
 else
     if excludeIncorrectTrial == 0
-        meanDiff_sample = mean(estimateStim2_collapse) - mean(estimateStim1_collapse);
+        medianDiff_sample = median(estimateStim2_collapse) - median(estimateStim1_collapse);
         corr_sample = corr(estimateStim2_collapse, estimateStim1_collapse);
     elseif excludeIncorrectTrial == 1
         diffEst_original = estimateStim2_collapse - estimateStim1_collapse;    
-        meanDiff_sample = mean(estimateStim2_collapse(diffEst_original>0)) - mean(estimateStim1_collapse(diffEst_original>0));
+        medianDiff_sample = median(estimateStim2_collapse(diffEst_original>0)) - median(estimateStim1_collapse(diffEst_original>0));
         corr_sample = corr(estimateStim2_collapse(diffEst_original>0), estimateStim1_collapse(diffEst_original>0));
     elseif excludeIncorrectTrial == 2
         diffEst_original = estimateStim2_collapse - estimateStim1_collapse;  
@@ -62,23 +62,23 @@ else
         estStim2 = estimateStim2_collapse;
         estStim1(indFlip) = estimateStim2_collapse(indFlip);
         estStim2(indFlip) = estimateStim1_collapse(indFlip);
-        meanDiff_sample = mean(estStim2) - mean(estStim1);
+        medianDiff_sample = median(estStim2) - median(estStim1);
         corr_sample = corr(estStim2, estStim1);        
     end
 end
 
 % Percent correct
 if experiment_condition == 1
-    percentCorrect_sample = mean(percentCorrect_boot);
+    percentCorrect_sample = median(percentCorrect_boot);
 else
     percentCorrect_sample = 100 * sum(estimateStim2_collapse >= estimateStim1_collapse) / length(estimateStim2_collapse);
 end
 
-sampleStat_all = [meanDiff_sample corr_sample percentCorrect_sample];
+sampleStat_all = [medianDiff_sample corr_sample percentCorrect_sample];
 
 %% Compute confidence interval
-confInterval_all(1, 1) = prctile(meanDiff_boot, alpha*100/2);
-confInterval_all(2, 1) = prctile(meanDiff_boot, 100 - alpha*100/2);
+confInterval_all(1, 1) = prctile(medianDiff_boot, alpha*100/2);
+confInterval_all(2, 1) = prctile(medianDiff_boot, 100 - alpha*100/2);
 confInterval_all(1, 2) = prctile(corr_boot, alpha*100/2);
 confInterval_all(2, 2) = prctile(corr_boot, 100 - alpha*100/2);
 confInterval_all(1, 3) = prctile(percentCorrect_boot, alpha*100/2);
@@ -97,7 +97,7 @@ confInterval_all(2, 3) = prctile(percentCorrect_boot, 100 - alpha*100/2);
 %         thetai(i) = myStatistic(x(id));
 %     end
 %     %do something related to skewness.
-%     a = sum( (mean(thetai)-thetai).^3)/(6*(sum( (mean(thetai)-thetai).^2).^(3/2)));
+%     a = sum( (median(thetai)-thetai).^3)/(6*(sum( (median(thetai)-thetai).^2).^(3/2)));
 % 
 % 
 %     % Calculate the 'bias-corrected and accelerated' percentiles using z0 and a

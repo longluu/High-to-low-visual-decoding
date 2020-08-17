@@ -46,7 +46,7 @@ for ll = 1 : length(subjectID)
     end
     subjectName = ['Subject: ' subjectID{ll}];
     fprintf(fileID, '%27s \r\n', subjectName); 
-    fprintf(fileID,'%11s %11 %11 %11 %8s %8s %8s %8s \r\n', '//-LLHTotal', '-LLH1', '-LLH2', ...
+    fprintf(fileID,'%11s %11s %11s %8s %8s %8s %8s %8s \r\n', '//-LLHTotal', '-LLH1', '-LLH2', ...
                     'stdSensory', 'stdMemory_1line', 'stdMemory_2line', 'std_motor', 'const_bias');
     for kk = 1 : nLoops
         [tempFitParameter, tempNegLLH] = modelFitBayes_Cond1and2(SetStartPoint, initialValue, share_memory, include_motor_noise, include_const_bias, params, fileID);
