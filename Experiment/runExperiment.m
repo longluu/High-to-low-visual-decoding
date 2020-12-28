@@ -17,7 +17,7 @@ params.distanceMouseInitiationDeg = 6;
 params.pointerLengthDeg = 6;
 params.lineFeedbackRGB = [0 255 0];
 params.interPointerDuration = 0.017;
-params.colorPointer = [255 0 255; 0 255 0];
+params.colorPointer = [255 0 255; 0 255 0   ];
 params.feedbackPointer = [255 255 255];
 
 % Eye gaze check
