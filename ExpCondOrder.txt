@@ -1,0 +1,4 @@
+Order of 2-line conditions
+ - 2-line first: 'km', 'ccp', 'if', 'an', sr', 'rl', 'lw', 'ln', 'bg'
+ - 2-line-interupt first: 'cm', 'lp', 'cr', 'zt', 'mb', 'sar'
+	

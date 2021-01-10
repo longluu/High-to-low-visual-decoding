@@ -2,7 +2,7 @@
 % Old: 'an', 'bl', 'ccp', 'km', 'ln', 'rl', 'sr', 'sar', 'sy', 'cr', 'cm', 'mb', 'lw', 'bg'
 % New: 'km', 'ccp', 'cm', 'lp', 'if', 'cr', 'an', 'sr', 'zt', 'rl', 'lw', 'mb', 'ln', 'sar', 'bg'
 subjectAll = {'km', 'ccp', 'cm', 'lp', 'if', 'cr', 'an', 'sr', 'zt', 'rl', 'lw', 'mb', 'ln', 'sar', 'bg'};
-useSplit1line = 1;
+useSplit1line = 1; % use condition with separate blocks
 session = 1;
 experimentNumber = 1;
 nBootstrap = 10000;
@@ -10,7 +10,7 @@ markerSize = 8;
 lineWidth = 0.5;
 alpha = 0.05;
 plotIndividualSubject = 0;
-excludeIncorrectTrial = 0; % 0: all trials
+excludeIncorrectTrial = 2; % 0: all trials
                            % 1: correct trials
                            % 2: all trials but flip incorrect trials across diagonal line
 meanDiffEst_Cond1 = NaN(4, length(subjectAll));
@@ -24,6 +24,8 @@ percentCorrect_Cond2 = NaN(4, length(subjectAll));
 percentCorrect_Cond3 = NaN(4, length(subjectAll));
 std_Cond2_split = NaN(2, length(subjectAll));
 std_Cond3_split = NaN(2, length(subjectAll));
+meanDiff_Cond2_split = NaN(2, length(subjectAll));
+meanDiff_Cond3_split = NaN(2, length(subjectAll));
 std_Cond1 = NaN(1, length(subjectAll));
 std_Cond2 = NaN(1, length(subjectAll));
 std_Cond3 = NaN(1, length(subjectAll));
@@ -114,7 +116,7 @@ for ss = 1 : length(subjectAll)
     corr_Cond1(3:4, ss) = confInterval_all(:, 2);
     percentCorrect_Cond1(1, ss) = sampleStat_all(3);
     percentCorrect_Cond1(3:4, ss) = confInterval_all(:, 3);
-    std_Cond1(ss) = sqrt(nanstd(estimateStim1_collapse)^2 +  nanstd(estimateStim2_collapse)^2);
+    std_Cond1(ss) = sqrt((nanstd(estimateStim1_collapse)^2 +  nanstd(estimateStim2_collapse)^2)/2);
     
     %% Experiment 2
     experimentName = 'HighToLow';
@@ -153,10 +155,14 @@ for ss = 1 : length(subjectAll)
     % Std of first and second estimate
     std_estStim1Est1 = nanstd(estimateLine1(indStim1Est1));
     std_estStim2Est1 = nanstd(estimateLine1(indStim2Est1));
-    std_est1_Cond2 = sqrt((std_estStim1Est1^2 + std_estStim2Est1^2) / 2);
+    std_Cond2_split(1, ss) = sqrt((std_estStim1Est1^2 + std_estStim2Est1^2) / 2);
     std_estStim1Est2 = nanstd(estimateLine2(indStim1Est2));
     std_estStim2Est2 = nanstd(estimateLine2(indStim2Est2));
-    std_est2_Cond2 = sqrt((std_estStim1Est2^2 + std_estStim2Est2^2) / 2);
+    std_Cond2_split(2, ss) = sqrt((std_estStim1Est2^2 + std_estStim2Est2^2) / 2);
+
+    % Mean diff of 1st and 2nd estimate
+    meanDiff_Cond2_split(1, ss) = nanmean(estimateLine1(indStim2Est1)) - nanmean(estimateLine1(indStim1Est1));
+    meanDiff_Cond2_split(2, ss) = nanmean(estimateLine2(indStim2Est2)) - nanmean(estimateLine2(indStim1Est2));
     
     % Bootstrap the mean difference, correlation and percent correct
     experiment_condition = 2;
@@ -169,7 +175,7 @@ for ss = 1 : length(subjectAll)
     corr_Cond2(3:4, ss) = confInterval_all(:, 2);
     percentCorrect_Cond2(1, ss) = sampleStat_all(3);
     percentCorrect_Cond2(3:4, ss) = confInterval_all(:, 3);
-    std_Cond2(ss) = nanstd(estimateStim2_collapse - estimateStim1_collapse);
+    std_Cond2(ss) = sqrt((nanstd(estimateStim1_collapse)^2 +  nanstd(estimateStim2_collapse)^2)/2);
     
     %% Experiment 3
     experimentName = 'HighToLow_separate';
@@ -202,14 +208,18 @@ for ss = 1 : length(subjectAll)
     estimateStim2_collapse = [estimateLine2(indStim2Est2);estimateLine1(indStim2Est1)];
     estimateStim1_collapse = estimateStim1_collapse(~isnan(estimateStim1_collapse));
     estimateStim2_collapse = estimateStim2_collapse(~isnan(estimateStim2_collapse));
+
+    % Mean diff of 1st and 2nd estimate
+    meanDiff_Cond3_split(1, ss) = nanmean(estimateLine1(indStim2Est1)) - nanmean(estimateLine1(indStim1Est1));
+    meanDiff_Cond3_split(2, ss) = nanmean(estimateLine2(indStim2Est2)) - nanmean(estimateLine2(indStim1Est2));
     
     % Std of first and second estimate
     std_estStim1Est1 = nanstd(estimateLine1(indStim1Est1));
     std_estStim2Est1 = nanstd(estimateLine1(indStim2Est1));
-    std_est1_Cond3 = sqrt((std_estStim1Est1^2 + std_estStim2Est1^2) / 2);
+    std_Cond3_split(1, ss) = sqrt((std_estStim1Est1^2 + std_estStim2Est1^2) / 2);
     std_estStim1Est2 = nanstd(estimateLine2(indStim1Est2));
     std_estStim2Est2 = nanstd(estimateLine2(indStim2Est2));
-    std_est2_Cond3 = sqrt((std_estStim1Est2^2 + std_estStim2Est2^2) / 2);
+    std_Cond3_split(2, ss) = sqrt((std_estStim1Est2^2 + std_estStim2Est2^2) / 2);
 
     % Bootstrap the mean difference, correlation and percent correct
     experiment_condition = 3;
@@ -222,16 +232,10 @@ for ss = 1 : length(subjectAll)
     corr_Cond3(3:4, ss) = confInterval_all(:, 2);
     percentCorrect_Cond3(1, ss) = sampleStat_all(3);
     percentCorrect_Cond3(3:4, ss) = confInterval_all(:, 3);
-    std_Cond3(ss) = nanstd(estimateStim2_collapse - estimateStim1_collapse);
-
-    %% Save std of estimates first and second line     
-    std_Cond2_split(1, ss) = std_est1_Cond2;
-    std_Cond2_split(2, ss) = std_est2_Cond2;
-    std_Cond3_split(1, ss) = std_est1_Cond3;
-    std_Cond3_split(2, ss) = std_est2_Cond3; 
+    std_Cond3(ss) = sqrt((nanstd(estimateStim1_collapse)^2 +  nanstd(estimateStim2_collapse)^2)/2);
 end
 
-%% Plot summary statistic individual subject
+%% Plot summary statistics of individual subject (mean diff, corr, percent correct)
 colorName = {'Pink', 'Brown', 'Olive', 'Teal', 'Blue', 'Black', 'Red', 'Orange', 'Yellow',...
             'Lime', 'Cyan', 'DarkViolet', 'Magenta', 'Gray', 'RosyBrown', 'PaleGreen' };
 colorIndex = NaN(length(colorName), 3);
@@ -360,7 +364,7 @@ axis square
 xlabel('Percent correct - Cond1 (deg)')
 ylabel('Percent correct - Cond3 (deg)')
 
-%% Plot comparing condition 2 and 3 and comparing std
+%% Plot comparing mean diff of 2-line vs. 2-line-interupt and legend of subj
 figure;
 hold on
 subplot(1, 2, 1)
@@ -397,58 +401,110 @@ end
 xlim([10.6 11])
 axis off
 
+%% Plot analysis of std
 figure;
 subplot(2, 2, 1)
 hold on
-minPlot = min([std_Cond2_split(1, :) std_Cond2_split(2, :)]) - 0.1;
-maxPlot = max([std_Cond2_split(1, :) std_Cond2_split(2, :)]) + 0.1;
+minPlot = min([std_Cond2_split(1, :) std_Cond2_split(2, :)]) - 0.5;
+maxPlot = max([std_Cond2_split(1, :) std_Cond2_split(2, :)]) + 0.5;
+plot([minPlot maxPlot], [minPlot maxPlot], 'k')
 for ii = 1 : length(subjectAll)
-    plot(std_Cond2_split(1, ii), std_Cond3_split(1, ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+    plot(std_Cond2_split(1, ii), std_Cond2_split(2, ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
 end
-plot([minPlot maxPlot], [minPlot maxPlot])
-title('Std of firt estimate')
-xlabel('Std of first estimate - Cond 2 (deg)')
-ylabel('Std of first estimate - Cond 3 (deg)')
-axis square
+xlim([minPlot maxPlot])
+ylim([minPlot maxPlot])
+title('2-line condition')
+xlabel('Std of 1st estimate (deg)')
+ylabel('Std of 2nd estimate (deg)')
 
 subplot(2, 2, 2)
 hold on
-minPlot = min([std_Cond3_split(1, :) std_Cond3_split(2, :)]) - 0.1;
-maxPlot = max([std_Cond3_split(1, :) std_Cond3_split(2, :)]) + 0.1;
+minPlot = min([std_Cond3_split(1, :) std_Cond3_split(2, :)]) - 0.5;
+maxPlot = max([std_Cond3_split(1, :) std_Cond3_split(2, :)]) + 0.5;
+plot([minPlot maxPlot], [minPlot maxPlot], 'k')
 for ii = 1 : length(subjectAll)
-    plot(std_Cond2_split(2, ii), std_Cond3_split(2, ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+    plot(std_Cond3_split(1, ii), std_Cond3_split(2, ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
 end
-plot([minPlot maxPlot], [minPlot maxPlot])
-axis square
-title('Std of second estimate')
-xlabel('Std of second estimate - Cond 2 (deg)')
-ylabel('Std of second estimate - Cond 3 (deg)')
+xlim([minPlot maxPlot])
+ylim([minPlot maxPlot])
+title('2-line-interupt condition')
+xlabel('Std of 1st estimate (deg)')
+ylabel('Std of 2nd estimate (deg)')
 
 subplot(2, 2, 3)
 hold on
-minPlot = min([std_Cond1 std_Cond2]) - 0.1;
-maxPlot = max([std_Cond1 std_Cond2]) + 0.1;
+minPlot = min([std_Cond1 std_Cond2 std_Cond3]) - 0.5;
+maxPlot = max([std_Cond1 std_Cond2 std_Cond3]) + 0.5;
+plot([minPlot maxPlot], [minPlot maxPlot], 'k')
 for ii = 1 : length(subjectAll)
     plot(std_Cond1(ii), std_Cond2(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
 end
-plot([minPlot maxPlot], [minPlot maxPlot])
-axis square
-title('Cond 2 vs Cond 1')
-xlabel('Std of estimate difference - Cond 1 (deg)')
-ylabel('Std of estimate difference - Cond 2 (deg)')
+xlim([minPlot maxPlot])
+ylim([minPlot maxPlot])
+title('1-line vs. 2-line')
+xlabel('Std of estimate, 1-line (deg)')
+ylabel('Std of estimate, 2-line (deg)')
 
 subplot(2, 2, 4)
 hold on
-minPlot = min([std_Cond1 std_Cond3]) - 0.1;
-maxPlot = max([std_Cond1 std_Cond3]) + 0.1;
+plot([minPlot maxPlot], [minPlot maxPlot], 'k')
 for ii = 1 : length(subjectAll)
     plot(std_Cond1(ii), std_Cond3(ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
 end
+xlim([minPlot maxPlot])
+ylim([minPlot maxPlot])
+title('1-line vs. 2-line interupt')
+xlabel('Std of estimate, 1-line (deg)')
+ylabel('Std of estimate, 2-line interupt (deg)')
+
+%% Plot mean diff 1st vs. 2nd estimates
+figure;
+subplot(1, 2, 1)
+hold on
+minPlot = min([meanDiff_Cond2_split(1, :) meanDiff_Cond2_split(2, :)]) - 0.5;
+maxPlot = max([meanDiff_Cond2_split(1, :) meanDiff_Cond2_split(2, :)]) + 0.5;
 plot([minPlot maxPlot], [minPlot maxPlot])
-axis square
-title('Cond 3 vs Cond 1')
-xlabel('Std of estimate difference - Cond 1 (deg)')
-ylabel('Std of estimate difference - Cond 3 (deg)')
+for ii = 1 : length(subjectAll)
+    plot(meanDiff_Cond2_split(1, ii), meanDiff_Cond2_split(2, ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+end
+xlim([minPlot maxPlot])
+ylim([minPlot maxPlot])
+title('1-line vs. 2-line')
+xlabel('Mean diff, 1-line (deg)')
+ylabel('Mean diff, 2-line (deg)')
+
+subplot(1, 2, 2)
+hold on
+minPlot = min([meanDiff_Cond3_split(1, :) meanDiff_Cond3_split(2, :)]) - 0.5;
+maxPlot = max([meanDiff_Cond3_split(1, :) meanDiff_Cond3_split(2, :)]) + 0.5;
+plot([minPlot maxPlot], [minPlot maxPlot])
+for ii = 1 : length(subjectAll)
+    plot(meanDiff_Cond3_split(1, ii), meanDiff_Cond3_split(2, ii), 'o', 'MarkerFaceColor', colorIndex(ii, :), 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+end
+xlim([minPlot maxPlot])
+ylim([minPlot maxPlot])
+title('2-line vs. 2-line-interupt')
+xlabel('Mean diff, 2-line (deg)')
+ylabel('Mean diff, 2-line-interupt (deg)')
+
+%% Plot correlation in cond 3 split by order of cond 2 and 3
+subj_cond3_first = {'cm', 'lp', 'cr', 'zt', 'mb', 'sar'};
+
+figure
+hold on
+plot([minPlot_corr maxPlot_corr], [minPlot_corr maxPlot_corr], 'k')
+for ii = 1 : length(subjectAll)
+    plot([corr_Cond1(3, ii) corr_Cond1(4, ii)], [corr_Cond3(1, ii) corr_Cond3(1, ii)], '-k', 'LineWidth', lineWidth)
+    plot([corr_Cond1(1, ii) corr_Cond1(1, ii)], [corr_Cond3(3, ii) corr_Cond3(4, ii)], '-k', 'LineWidth', lineWidth) 
+    if ~isempty(find(strcmp(subj_cond3_first, subjectAll{ii}), 1))
+        plot(corr_Cond1(1, ii), corr_Cond3(1, ii), 'o', 'MarkerFaceColor', 'blue', 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)
+    else
+        plot(corr_Cond1(1, ii), corr_Cond3(1, ii), 'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor', 'none', 'MarkerSize', markerSize)        
+    end
+end
+axis([minPlot_corr, maxPlot_corr, minPlot_corr, maxPlot_corr])
+xlabel('Correlation - Cond1 (deg)')
+ylabel('Correlation - Cond3 (deg)')
 
 %% Perform statistical tests
 % Mean diff
@@ -475,258 +531,18 @@ p_pc_1vs3= signrank(percentCorrect_Cond1(1, :), percentCorrect_Cond3(1, :),...
                                     'method', 'exact');
 fprintf('p-value percent correct cond 1 vs cond 3: %8.6f \n', p_pc_1vs3)    
 
-%% Plot individual subjects
-if plotIndividualSubject
-    h_currentFig = gcf;
-    markerSize = 4;
-    for ss = 1 : length(subjectAll)
-        subject = subjectAll{ss};
-        h_currentFig = figure(h_currentFig.Number+1);
-        h_currentFig.Position = [300 300 1200 700];
-        
-        hold on
+% Std of estimate
+p_std_1vs2= signrank(std_Cond1, std_Cond2,...
+                                    'method', 'exact');
+fprintf('p-value std cond 1 vs cond 2: %8.6f \n', p_std_1vs2) 
+p_std_1vs3= signrank(std_Cond1, std_Cond3,...
+                                    'method', 'exact');
+fprintf('p-value std cond 1 vs cond 3: %8.6f \n', p_std_1vs3)    
 
-        %% Experiment 1
-        if useSplit1line
-            %% First line
-            experimentName = 'HighToLow_1lineShow1_49';
-            dataFile = ['Data\' subject '\MainExperiment\' experimentName num2str(session) '\' experimentName '-'  num2str(experimentNumber) '.mat'];
-
-            % Load data
-            load(dataFile)
-
-            % Data array 
-            %  Column 1: orientation line 1
-            %  Column 2: orientation line 2
-            %  Column 3: subject's estimate line 1
-            %  Column 4: subject's estimate line 2
-            %  Column 5: subject's reaction time line 1
-            %  Column 6: subject's reaction time line 2
-            estimateStim1_collapse = dataResponse(:, 3);
-
-            % Extract the stimulus orientation
-            stimOrientation = params.lineOrientation;
-
-            %% Second line
-            experimentName = 'HighToLow_1lineShow1_54';
-            dataFile = ['Data\' subject '\MainExperiment\' experimentName num2str(session) '\' experimentName '-'  num2str(experimentNumber) '.mat'];
-
-            % Load data
-            load(dataFile)
-
-            % Data array 
-            %  Column 1: orientation line 1
-            %  Column 2: orientation line 2
-            %  Column 3: subject's estimate line 1
-            %  Column 4: subject's estimate line 2
-            %  Column 5: subject's reaction time line 1
-            %  Column 6: subject's reaction time line 2
-            estimateStim2_collapse = dataResponse(:, 4);
-
-        else
-            experimentName = 'HighToLow_1lineShow1';
-            dataFile = ['Data\' subject '\MainExperiment\' experimentName num2str(session) '\' experimentName '-'  num2str(experimentNumber) '.mat'];
-
-            % Load data
-            load(dataFile)
-
-            % Data array 
-            %  Column 1: orientation line 1
-            %  Column 2: orientation line 2
-            %  Column 3: subject's estimate line 1
-            %  Column 4: subject's estimate line 2
-            %  Column 5: subject's reaction time line 1
-            %  Column 6: subject's reaction time line 2
-            orientationLine1 = dataResponse(:, 1);
-            orientationLine2 = dataResponse(:, 2);
-            estimateLine1 = dataResponse(:, 3);
-            estimateLine2 = dataResponse(:, 4);
-
-            % Extract the stimulus orientation
-            stimOrientation = unique(orientationLine1);
-
-            % Collapse subjects' estimates across presentation order
-            indStim1Est1 = orientationLine1 == stimOrientation(1);
-            indStim1Est2 = orientationLine2 == stimOrientation(1);
-            indStim2Est1 = orientationLine1 == stimOrientation(2);
-            indStim2Est2 = orientationLine2 == stimOrientation(2);
-            estimateStim1 = [estimateLine1(indStim1Est1); estimateLine2(indStim1Est2)];
-            estimateStim2 = [estimateLine2(indStim2Est2);estimateLine1(indStim2Est1)];
-            estimateStim1_collapse = estimateStim1(~isnan(estimateStim1));
-            estimateStim2_collapse = estimateStim2(~isnan(estimateStim2));
-        end
-
-        % Analysis of percent correct
-        meanEst1 = nanmean(estimateStim1_collapse);
-        meanEst2 = nanmean(estimateStim2_collapse);
-        criterion = linspace(meanEst1-3, meanEst2+3, 50);
-        percentCorrect = NaN(1, length(criterion));
-        for ii = 1 : length(criterion)
-            percentCorrect(ii) = (sum(estimateStim1_collapse < criterion(ii)) + sum(estimateStim2_collapse >= criterion(ii))) / ...
-                                    (sum(~isnan(estimateStim1_collapse)) + sum(~isnan(estimateStim2_collapse)));
-        end
-
-        % Find the permutation of data that has lowest correlation
-        eps_correlation = 0.001;
-        corr_2line = 1;
-        while abs(corr_2line) > eps_correlation
-            est1 = datasample(estimateStim1_collapse, length(estimateStim1_collapse), 'Replace', false);
-            est2 = datasample(estimateStim2_collapse, length(estimateStim2_collapse), 'Replace', false);
-            corr_2line = corr(est1, est2);
-        end
-        estimateStim1_collapse = est1;
-        estimateStim2_collapse = est2;
-        diffEst = estimateStim2_collapse - estimateStim1_collapse;
-        
-        % Plot
-        subplot(2, 3, 1)
-        hold on
-        minPlot = min([estimateStim1_collapse; estimateStim2_collapse])-1;
-        maxPlot = max([estimateStim1_collapse; estimateStim2_collapse])+1;
-        plot([minPlot maxPlot], [minPlot maxPlot])
-        plot(stimOrientation(1), stimOrientation(2), 'o', 'MarkerSize', 10, 'MarkerFaceColor', [1 0 0], 'MarkerEdgeColor', 'none')
-        plot(estimateStim1_collapse, estimateStim2_collapse, 'o', 'MarkerSize', markerSize, 'MarkerFaceColor', 0.1*[1 1 1], 'MarkerEdgeColor', 'none');          
-        xlabel('Reported orientation for stimulus 1')
-        ylabel('Reported orientation for stimulus 2')
-        axis equal
-        xlim([minPlot maxPlot])
-        ylim([minPlot maxPlot])
-        title('1 line')
-
-        subplot(2, 3, 4)
-        histogram(diffEst, 20, 'Normalization', 'probability')
-        xlabel('Orientation difference (deg)')
-        ylabel('Frequency of occurence')
-        xlim([min(-2, min(diffEst)-1) max(diffEst)+1])
-        axis square
-        title(['Mean :' num2str(round(meanEst2 - meanEst1, 1)) ', Std: ' num2str(round(nanstd(diffEst), 1))])    
-
-        %% Experiment 2
-        experimentName = 'HighToLow';
-        dataFile = ['Data\' subject '\MainExperiment\' experimentName num2str(session) '\' experimentName '-'  num2str(experimentNumber) '.mat'];
-
-        % Load data
-        load(dataFile)
-        trialOrder = params.trialOrder;
-
-        % Data array 
-        %  Column 1: orientation line 1
-        %  Column 2: orientation line 2
-        %  Column 3: subject's estimate line 1
-        %  Column 4: subject's estimate line 2
-        %  Column 5: subject's reaction time line 1
-        %  Column 6: subject's reaction time line 2
-        orientationLine1 = dataResponse(:, 1);
-        orientationLine2 = dataResponse(:, 2);
-        estimateLine1 = dataResponse(:, 3);
-        estimateLine2 = dataResponse(:, 4);
-        rtLine1 = dataResponse(:, 5);
-        rtLine2 = dataResponse(:, 6);
-
-        % Extract the stimulus orientation
-        stimOrientation = unique(orientationLine1);
-
-        % Collapse subjects' estimates across presentation order
-        indStim1Est1 = orientationLine1 == stimOrientation(1);
-        indStim1Est2 = orientationLine2 == stimOrientation(1);
-        indStim2Est1 = orientationLine1 == stimOrientation(2);
-        indStim2Est2 = orientationLine2 == stimOrientation(2);
-        estimateStim1_collapse = [estimateLine1(indStim1Est1); estimateLine2(indStim1Est2)];
-        estimateStim2_collapse = [estimateLine2(indStim2Est2);estimateLine1(indStim2Est1)];
-        estimateStim1_collapse = estimateStim1_collapse(~isnan(estimateStim1_collapse));
-        estimateStim2_collapse = estimateStim2_collapse(~isnan(estimateStim2_collapse));
-        estimateStim1_collapse(estimateStim1_collapse<0) = estimateStim1_collapse(estimateStim1_collapse<0)+180;
-        estimateStim2_collapse(estimateStim2_collapse<0) = estimateStim2_collapse(estimateStim2_collapse<0)+180;        
-        diffEst = estimateStim2_collapse - estimateStim1_collapse;
-        percentCorrect = (sum(diffEst > 0) + sum(diffEst == 0)/2) / sum(~isnan(diffEst));
-        [corrCoef, pValue] = corr(estimateStim1_collapse, estimateStim2_collapse);
-        meanDiffEst_2line1(ss) = mean(diffEst);
-
-        % Plot estimates 
-        subplot(2, 3, 2)
-        hold on
-        minPlot = min([estimateStim1_collapse; estimateStim2_collapse])-1;
-        maxPlot = max([estimateStim1_collapse; estimateStim2_collapse])+1;
-        plot([minPlot maxPlot], [minPlot maxPlot])
-        plot(stimOrientation(1), stimOrientation(2), 'o', 'MarkerSize', 10, 'MarkerFaceColor', [1 0 0], 'MarkerEdgeColor', 'none')        
-        plot(estimateStim1_collapse, estimateStim2_collapse, 'o', 'MarkerSize', markerSize, 'MarkerFaceColor', 0.1*[1 1 1], 'MarkerEdgeColor', 'none')
-        xlabel('Reported orientation for stimulus 1')
-        ylabel('Reported orientation for stimulus 2')
-        axis equal
-        xlim([minPlot maxPlot])
-        ylim([minPlot maxPlot])
-        title('2 line')
-
-        subplot(2, 3, 5)
-        histogram(diffEst, 20, 'Normalization', 'probability')
-        xlabel('Orientation difference (deg)')
-        ylabel('Frequency of occurence')
-        xlim([min(-2, min(diffEst)-1) max(diffEst)+1])
-        axis square
-        title(['Mean: ' num2str(round(mean(diffEst), 1)) ', Std: ' num2str(round(nanstd(diffEst), 1)) ])
-
-        %% Experiment 3
-        experimentName = 'HighToLow_separate';
-        dataFile = ['Data\' subject '\MainExperiment\' experimentName num2str(session) '\' experimentName '-'  num2str(experimentNumber) '.mat'];
-
-        % Load data
-        load(dataFile)
-        trialOrder = params.trialOrder;
-
-        % Data array 
-        %  Column 1: orientation line 1
-        %  Column 2: orientation line 2
-        %  Column 3: subject's estimate line 1
-        %  Column 4: subject's estimate line 2
-        %  Column 5: subject's reaction time line 1
-        %  Column 6: subject's reaction time line 2
-        orientationLine1 = dataResponse(:, 1);
-        orientationLine2 = dataResponse(:, 2);
-        estimateLine1 = dataResponse(:, 3);
-        estimateLine2 = dataResponse(:, 4);
-        rtLine1 = dataResponse(:, 5);
-        rtLine2 = dataResponse(:, 6);
-
-        % Extract the stimulus orientation
-        stimOrientation = unique(orientationLine1);
-
-        % Collapse subjects' estimates across presentation order
-        indStim1Est1 = orientationLine1 == stimOrientation(1);
-        indStim1Est2 = orientationLine2 == stimOrientation(1);
-        indStim2Est1 = orientationLine1 == stimOrientation(2);
-        indStim2Est2 = orientationLine2 == stimOrientation(2);
-        estimateStim1_collapse = [estimateLine1(indStim1Est1); estimateLine2(indStim1Est2)];
-        estimateStim2_collapse = [estimateLine2(indStim2Est2);estimateLine1(indStim2Est1)];
-        indInclude = (~isnan(estimateStim1_collapse)) & (~isnan(estimateStim2_collapse));
-        estimateStim1_collapse = estimateStim1_collapse(indInclude);
-        estimateStim2_collapse = estimateStim2_collapse(indInclude);
-        diffEst = estimateStim2_collapse - estimateStim1_collapse;
-        percentCorrect = (sum(diffEst > 0) + sum(diffEst == 0)/2) / sum(~isnan(diffEst));
-        [corrCoef, pValue] = corr(estimateStim1_collapse, estimateStim2_collapse);
-
-        % Plot estimates    
-        subplot(2, 3, 3)
-        hold on
-        minPlot = min([estimateStim1_collapse; estimateStim2_collapse])-1;
-        maxPlot = max([estimateStim1_collapse; estimateStim2_collapse])+1;
-        plot([minPlot maxPlot], [minPlot maxPlot])
-        plot(stimOrientation(1), stimOrientation(2), 'o', 'MarkerSize', 10, 'MarkerFaceColor', [1 0 0], 'MarkerEdgeColor', 'none')
-        plot(estimateStim1_collapse, estimateStim2_collapse, 'o', 'MarkerSize', markerSize, 'MarkerFaceColor', 0.1*[1 1 1], 'MarkerEdgeColor', 'none')        
-        xlabel('Reported orientation for stimulus 1')
-        ylabel('Reported orientation for stimulus 2')
-        axis equal
-        xlim([minPlot maxPlot])
-        ylim([minPlot maxPlot])
-        title('2 line - redraw')
-
-        subplot(2, 3, 6)
-        histogram(diffEst, 20, 'Normalization', 'probability')
-        xlabel('Orientation difference (deg)')
-        ylabel('Frequency of occurence')
-        xlim([min(-2, min(diffEst)-1) max(diffEst)+1])
-        axis square
-        title(['Mean: ' num2str(round(mean(diffEst), 1)) ', Std: ' num2str(round(nanstd(diffEst), 1))]) 
-        
-        saveas(h_currentFig, [subjectAll{ss} '.pdf'])
-    end
-end
+% Mean diff 1st vs. 2nd estimate
+p_meanDiff_1vs2_cond2 = signrank(meanDiff_Cond2_split(1, :), meanDiff_Cond2_split(2, :),...
+                                    'method', 'exact');
+fprintf('p-value mean diff 1st vs. 2nd estimate, cond 2: %8.6f \n', p_meanDiff_1vs2_cond2) 
+p_meanDiff_1vs2_cond3 = signrank(meanDiff_Cond3_split(1, :), meanDiff_Cond3_split(2, :),...
+                                    'method', 'exact');
+fprintf('p-value mean diff 1st vs. 2nd estimate, cond 3: %8.6f \n', p_meanDiff_1vs2_cond3) 
