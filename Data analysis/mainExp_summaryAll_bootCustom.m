@@ -141,6 +141,8 @@ for ss = 1 : length(subjectAll)
     stimOrientation = unique(orientationLine1);
 
     % Collapse subjects' estimates across presentation order
+    % Get the index for 49 deg stim (1st and 2nd report) and 54 deg (1st and 2nd report)
+    % indStim1Est1 (49 deg, 1st), indStim1Est2 (49 deg, 2nd), indStim2Est1 (54 deg, 1st), indStim2Est2 (54 deg, 2nd)    
     indStim1Est1 = orientationLine1 == stimOrientation(1);
     indStim1Est2 = orientationLine2 == stimOrientation(1);
     indStim2Est1 = orientationLine1 == stimOrientation(2);
